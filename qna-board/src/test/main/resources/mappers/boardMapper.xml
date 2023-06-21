@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.board2.dao.BoardDao">
+
+ 	<select id="maxNum" resultType="int">
+ 		SELECT NVL(MAX(NUM), 0) FROM BOARD
+ 	</select>
+ 	
+ 	<insert id="insertData" parameterType="Board">
+ 		INSERT INTO BOARD
+ 		VALUES(#{num}, #{name}, #{pwd}, #{email},
+		#{subject}, #{content}, #{ipAddr}, 0, sysdate)
+ 	</insert>
+ 	
+ 	<select id="getDataCount" parameterType="map" resultType="int">
+ 		SELECT NVL(COUNT(*), 0) FROM BOARD
+		WHERE ${searchKey} LIKE '%' || #{searchValue} || '%'	
+ 	</select>
+ 	
+ 	
+ 	<select id="getLists" parameterType="map" resultType="Board">
+ 	SELECT * FROM (
+    SELECT ROWNUM RNUM, DATA.* FROM (
+        SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') CREATED 
+        FROM BOARD
+        WHERE ${searchKey} LIKE '%' || #{searchValue} || '%'
+        ORDER BY NUM DESC
+    	) DATA
+	)
+	<![CDATA[
+		WHERE RNUM >= #{start} AND RNUM <= #{end}
+	]]>
+ 	
+ 	</select>
+ 	
+ 	<update id="updateHitCount" parameterType="int">
+ 		UPDATE BOARD SET HITCOUNT = HITCOUNT + 1 WHERE NUM = #{num}
+ 	</update>
+ 	
+ 	<select id="getReadData" parameterType="int" resultType="Board"> 
+ 		select * from board where num = #{num}
+ 	</select>
+ 	
+ 	<update id="updateData" parameterType="Board">
+ 		UPDATE BOARD SET NAME=#{name}, PWD=#{pwd}, EMAIL=#{email},
+		SUBJECT=#{subject}, CONTENT=#{content} WHERE NUM = #{num}
+ 	</update>
+ 	
+ 	<delete id="deleteData" parameterType="int">
+ 		DELETE BOARD WHERE NUM = #{num}
+ 	</delete>
+</mapper>
