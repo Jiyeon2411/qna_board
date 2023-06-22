@@ -5,16 +5,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.qnaboard.dao.QnaBoardDao">
 
-	<select id="maxNum" resultType="int">
+	<select id="maxNum">
 		SELECT NVL(MAX(NUM), 0) FROM QNA
 	</select>
 
 	<insert id="insertData">
-		INSERT INTO QNA VALUES(#{num}, #{name}, #{subject}, #{content}, SYSDATE, 0);
+		INSERT INTO QNA VALUES(#{num}, #{name}, #{subject}, #{content}, SYSDATE, 0)
 	</insert>
 
-	<select id="getDataCount" parameterType="map" resultType="int">
+	<select id="getDataCount" parameterType="map">
 		SELECT NVL(COUNT(*), 0) FROM QNA WHERE ${searchKey} LIKE '%' || #{searchValue} || '%'
 	</select>
+
+<select id="getLists" parameterType="map" resultType="QnaBoardDto">
+	SELECT * FROM (
+    SELECT ROWNUM RNUM, DATA.* FROM (
+        SELECT NUM, NAME, SUBJECT, HITCOUNT, TO_CHAR(CREATED, 'YYYY-MM-DD') CREATED 
+        FROM QNA
+        WHERE ${searchKey} LIKE '%' || #{searchValue} || '%'
+        ORDER BY NUM DESC
+    ) DATA
+)
+<![CDATA[
+	WHERE RNUM >= #{start} AND RNUM <= #{end}
+]]>
+</select>
+
+<update id="updateHitCount" parameterType="int">
+	UPDATE QNA SET HITCOUNT = HITCOUNT + 1 WHERE NUM = #{num}
+</update>
+
+<select id="getReadData" parameterType="int" resultType="QnaBoardDto">
+	SELECT NUM, NAME, SUBJECT, CONTENT, CREATED , HITCOUNT FROM QNA WHERE NUM = #{num}
+</select>
 
 </mapper>

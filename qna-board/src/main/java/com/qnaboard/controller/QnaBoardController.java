@@ -1,5 +1,9 @@
 package com.qnaboard.controller;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +27,95 @@ public class QnaBoardController {
 	
 	@RequestMapping(value = "/")
 	public String index() {
-		return "/index2";
+		return "index";
 	}
 	
 	@RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
 	public String list(QnaBoardDto qnaboardto, HttpServletRequest request, Model model) {
+		
+		try {
+			String pageNum = request.getParameter("pageNum");
+			int currentPage = 1;
+			
+			if(pageNum!= null)
+				currentPage = Integer.parseInt(pageNum);
+			
+			String searchKey = request.getParameter("searchKey");
+			String searchValue = request.getParameter("searchValue");
+			
+			if(searchValue == null) {
+				searchKey = "subject";
+				searchValue = "";
+			} else {
+				if(request.getMethod().equalsIgnoreCase("GET")) {
+					searchValue = URLDecoder.decode(searchValue, "UTF-8");
+			}
+			}
+			
+			int dataCount = qnaBoardService.getDataCount(searchKey, searchValue);
+			
+			int numPerPage = 5;
+			int totalPage = Util.getPageCount(numPerPage, dataCount);
+			
+			if(currentPage > totalPage)
+				currentPage = totalPage;
+			
+			int start = (currentPage-1) * numPerPage + 1;
+			int end = currentPage * numPerPage;
+			
+			List<QnaBoardDto> lists = qnaBoardService.getLists(start, end, searchKey, searchValue);
+			
+			String param = "";
+			
+			if(searchValue != null&&!searchValue.equals("")) {
+				param = "searchKey=" + searchKey;
+				param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+			}
+			
+			String listUrl = "/list";
+			
+			if(!param.equals("")) {
+				listUrl += "?" + param;
+			}
+			
+			String pageIndexList = Util.pageIndexList(currentPage, totalPage, listUrl);
+			
+			String articleUrl = "/article?pageNum=" + currentPage;
+			
+			if(!param.equals("")) {
+				articleUrl += "&" + param;
+			}
+			
+			model.addAttribute("lists", lists);
+			model.addAttribute("articleUrl", articleUrl);
+			model.addAttribute("pageIndexList", pageIndexList);
+			model.addAttribute("dataCount", dataCount);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "목록을 불러오는중 에러가 발생했습니다.");
+		}
+		
 		return "bbs/list";
+	}
+	
+	@RequestMapping(value = "/created", method = RequestMethod.GET)
+	public String created() throws Exception{
+		return "bbs/created";
+	}
+	
+	@RequestMapping(value = "/created", method = RequestMethod.POST)
+	public String createdOK(QnaBoardDto qnaboarddto, HttpServletRequest request, Model model) {
+		
+		try {
+			int maxNum = qnaBoardService.maxNum();
+			qnaboarddto.setNum(maxNum + 1);
+			qnaBoardService.insertData(qnaboarddto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "글 작성 중 에러가 발생했습니다.");
+			return "bbs.created";
+		}
+		return "redirect:/list";
 	}
 }
