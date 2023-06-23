@@ -10,7 +10,7 @@
 
 <div id="list" layout:fragment="content">
 	<div id="list_header">
-		<div id="leftHeader">
+		<div id="leftHeader" style="float:left; width:400px">
 		<form action="" method="post" name="searchForm">
 			<select name="searchKey" class="selectField">
 				<option value="subject">제목</option>
@@ -18,16 +18,16 @@
 				<option value="content">내용</option>
 			</select>
 			<input type="text" name="searchValue" class="textField"/>
-			<input type="button" value="검색" class="btn2" onclick="sendIt();"/> 
+			<input type="button" value="검색" class="btn2" style=background-color:pink onclick="sendIt();"/> 
 		</form>
 		</div>
 		<div id="rightHeader">
-			<input type="button" value="문의하기" class="btn2" onclick="javascript:location.href='/created';"/>
+			<input type="button" value="문의하기" class="btn2" style="float:right; background-color:pink; vertical-align: bottom" onclick="javascript:location.href='/created';"/>
 		</div>
 	</div>
 
 	<div id="list_list">
-		<table class="table">
+		<table class="table" style="width:690px; height:300px; padding-top:30px">
   <thead>
     <tr>
       <th scope="col">순번</th>
@@ -37,17 +37,16 @@
       <th scope="col">조회수</th>
     </tr>
   </thead>
-  <tbody>
-    <tr th:if="${#lists.size(lists)}>0" th:each="qnaboarddto:${lists}">
-      <th scope="row" th:text="${qnaboarddto.num}"></th>
-      <td>
-      	<a th:href="|@{${articleUrl}}&num=@{${qnaboarddto.num}}|" th:text="${qnaboarddto.subject}">제목</a>
-      </td>
+  
+   <tbody>
+    <tr th:if="${#lists.size(lists)}>0" th:each="qnaboarddto:${lists}" style="margin:100px; text-align:center">
+      <th scope="row" th:text="${qnaboarddto.num}" style=width:100px></th>
+      <td><a th:href="|@{${articleUrl}}&num=@{${qnaboarddto.num}}|"th:text="${qnaboarddto.subject}">제목</a></td>
       <td th:text="${qnaboarddto.name}">이름</td>
       <td th:text="${qnaboarddto.created}">날짜</td>
       <td th:text="${qnaboarddto.hitCount}">조회수</td>
     </tr>
-  </tbody>
+  
 </table>
 	</div>
 

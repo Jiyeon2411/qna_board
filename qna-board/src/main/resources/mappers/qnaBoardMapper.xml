@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="insertData">
-		INSERT INTO QNA VALUES(#{num}, #{name}, #{subject}, #{content}, SYSDATE, 0)
+		INSERT INTO QNA (NUM, NAME, SUBJECT, CONTENT, CREATED, HITCOUNT) VALUES (#{num}, #{name}, #{subject}, #{content}, SYSDATE, 0)
 	</insert>
 
 	<select id="getDataCount" parameterType="map">
@@ -38,5 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="getReadData" parameterType="int" resultType="QnaBoardDto">
 	SELECT NUM, NAME, SUBJECT, CONTENT, CREATED , HITCOUNT FROM QNA WHERE NUM = #{num}
 </select>
+
+<update id="updateData" parameterType="string">
+	UPDATE QNA SET NAME = #{name}, SUBJECT=#{subject}, CONTENT=#{content} WHERE NUM = #{num}
+</update>
 
 </mapper>

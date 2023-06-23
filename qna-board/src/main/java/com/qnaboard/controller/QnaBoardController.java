@@ -1,5 +1,6 @@
 package com.qnaboard.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
@@ -118,4 +119,69 @@ public class QnaBoardController {
 		}
 		return "redirect:/list";
 	}
-}
+	
+	@RequestMapping(value = "/article",
+			method = {RequestMethod.GET,RequestMethod.POST})
+	public String article(HttpServletRequest request, Model model) {
+			
+			try {
+				int num = Integer.parseInt(request.getParameter("num"));
+				String pageNum = request.getParameter("pageNum");
+				String searchKey = request.getParameter("searchKey");
+				String searchValue = request.getParameter("searchValue");
+				
+				if(searchValue != null) {
+				searchValue = URLDecoder.decode(searchValue, "UTF-8");
+				} 
+				
+				qnaBoardService.updateHitCount(num);
+				
+				QnaBoardDto qnaboarddto = qnaBoardService.getReadData(num);
+				
+				if(qnaboarddto == null) {
+					return "redirect:/list?pageNum=" + pageNum;
+				}
+				
+				String param = "pageNum=" + pageNum;
+				if(searchValue != null && !searchValue.equals("")) {
+					
+					param += "&searchKey=" + searchKey;
+					param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+				}
+				
+				model.addAttribute("qnaboarddto", qnaboarddto);
+				model.addAttribute("params", param);
+				model.addAttribute("pageNum", pageNum);
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				model.addAttribute("errorMessage", "게시글을 불러오는 중 에러가 발생했습니다.");
+			}
+				return "bbs/article";
+	}
+	
+	@RequestMapping(value = "/updated", method = {RequestMethod.GET, RequestMethod.POST})
+	public String updated(HttpServletRequest request, Model model) throws Exception{
+		
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+		
+		String searchKey = request.getParameter("searchKey");
+		String searchValue = request.getParameter("searchValue");
+		
+		if(searchValue != null) {
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+		}
+		
+		QnaBoardDto qnaboarddto = qnaBoardService.getReadData(num);
+		
+		if(qnaboarddto == null) {
+			
+		}
+		
+		return pageNum;
+		
+		
+	}
+	}

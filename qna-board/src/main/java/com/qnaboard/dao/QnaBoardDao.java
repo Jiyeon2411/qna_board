@@ -10,7 +10,7 @@ import com.qnaboard.dto.QnaBoardDto;
 public interface QnaBoardDao {
 	public int maxNum() throws Exception;
 	
-	public void insertData() throws Exception;
+	public void insertData(QnaBoardDto qnaboarddto) throws Exception;
 	
 	public int getDataCount(String searchKey, String searchValue) throws Exception;
 	
@@ -19,4 +19,6 @@ public interface QnaBoardDao {
 	public void updateHitCount(int num) throws Exception;
 	
 	public QnaBoardDto getReadData(int num) throws Exception;
+	
+	public void updateData(QnaBoardDto qnaboarddto) throws Exception;
 }

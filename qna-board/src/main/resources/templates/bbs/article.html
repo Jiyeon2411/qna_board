@@ -2,14 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
-<head>
-<meta charset="UTF-8">
-<title>문의 게시판</title>
 
-<link rel="stylesheet" type="text/css" href="css/article.css"/>
+<th:block layout:fragment="css">
+	<link rel="stylesheet" type="text/css" href="css/article.css"/>
+</th:block>
 
-</head>
-<body>
+<div id="bbs" layout:fragment="content">
+	<div id="bbsArticle" style="border:1px; height:300px">
+		
+		<div id="bbsArticle_header">
+			<p th:text="${qnaboarddto.subject}" style=width:60px></p> 
+		</div>
+		
+		<div class="bbsArticle_bottomLine">
+			<dl>
+				<dt>작성자</dt>
+				<dd th:text="${qnaboarddto.name}" ></dd>
+			</dl>		
+		</div>
+		
+		<div class="bbsArticle_bottomLine">
+			<dl>
+				<dt>등록일</dt>
+				<dd th:text="${qnaboarddto.created}"></dd>
+				<dt>조회수</dt>
+				<dd th:text="${qnaboarddto.hitCount}" style=width:50px></dd>
+			</dl>		
+		</div>
+		
+		<div id="bbsArticle_content">
+			<table width="600" border="0">
+			<tr>
+				<td style="padding-left: 20px 80px 20px 62px;" 
+				valign="top" height="20px" >
+				<textarea rows="12" cols="82" name="content"
+				style="border: none"
+				class="boxTA" th:text="${qnaboarddto.content}"></textarea>
+			</tr>			
+			</table>
+		</div>
+		
+	</div>
+	
+	<div id="bbsArticle_footer">
+		<div id="leftFooter">
+			<input type="button" value=" 수정 " class="btn2" style="border-radius:50px; background-color:pink; width:50px"
+			th:onclick="|location.href='updated?num=@{${qnaboarddto.num}}&@{${params}}'|"/>
+			<input type="button" value=" 삭제 " class="btn2" style="border-radius:50px; background-color:pink; width:50px"
+			th:onclick="|location.href='deleted_ok?num=@{${qnaboarddto.num}}&@{${params}}'|"/>
+		</div>
+		<div id="rightFooter">
+			<input type="button" value=" 리스트 " class="btn2" style="border-radius:50px; background-color:pink; width:50px" 
+			th:onclick="|location.href='list?@{${params}}'|"/>
+		</div>	
+	</div>
+</div>
 
-</body>
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+	</script>
+	</th:block>
+
+
 </html>

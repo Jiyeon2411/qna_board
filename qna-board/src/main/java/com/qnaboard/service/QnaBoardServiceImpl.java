@@ -21,7 +21,7 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 
 	@Override
 	public void insertData(QnaBoardDto qnaboarddto) throws Exception {
-		qnaMapper.insertData();
+		qnaMapper.insertData(qnaboarddto);
 	}
 
 	@Override
@@ -42,6 +42,11 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 	@Override
 	public QnaBoardDto getReadData(int num) throws Exception {
 		return qnaMapper.getReadData(num);
+	}
+
+	@Override
+	public void updateData(QnaBoardDto qnaboarddto) throws Exception {
+		qnaMapper.updateData(qnaboarddto);
 	}
 
 	
