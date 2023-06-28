@@ -177,6 +177,12 @@ public class QnaBoardController {
 		QnaBoardDto qnaboarddto = qnaBoardService.getReadData(num);
 		
 		if(qnaboarddto == null) {
+			return "redirect:/list?pageNum=" + pageNum;
+		}
+		
+		String param = "pageNum=" + pageNum;
+		
+		if(searchValue != null && !searchValue.equals("")) {
 			
 		}
 		

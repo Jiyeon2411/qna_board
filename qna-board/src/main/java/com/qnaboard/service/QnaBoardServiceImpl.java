@@ -49,5 +49,8 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 		qnaMapper.updateData(qnaboarddto);
 	}
 
-	
+	@Override
+	public void deleteData(int num) throws Exception {
+		qnaMapper.deleteData(num);
+	}
 }

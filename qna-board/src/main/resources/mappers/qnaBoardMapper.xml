@@ -43,4 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	UPDATE QNA SET NAME = #{name}, SUBJECT=#{subject}, CONTENT=#{content} WHERE NUM = #{num}
 </update>
 
+<delete id="deleteData" parameterType="int">
+	DELETE QNA WHERE NUM = #{num}
+</delete>
+
 </mapper>

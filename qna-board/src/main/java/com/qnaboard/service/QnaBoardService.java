@@ -21,4 +21,6 @@ public interface QnaBoardService {
 	public QnaBoardDto getReadData(int num) throws Exception;
 	
 	public void updateData(QnaBoardDto qnaboarddto) throws Exception;
+	
+	public void deleteData(int num) throws Exception;
 }
