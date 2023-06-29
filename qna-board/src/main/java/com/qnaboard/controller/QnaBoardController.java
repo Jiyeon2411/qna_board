@@ -28,7 +28,27 @@ public class QnaBoardController {
 	
 	@RequestMapping(value = "/")
 	public String index() {
-		return "index";
+		return "/index";
+	}
+	
+	@RequestMapping(value = "/created", method = RequestMethod.GET)
+	public String created() {
+		return "bbs/created";
+	}
+	
+	@RequestMapping(value = "/created", method = RequestMethod.POST)
+	public String createdOK(QnaBoardDto qnaboarddto, HttpServletRequest request, Model model) {
+		
+		try {
+			int maxNum = qnaBoardService.maxNum();
+			qnaboarddto.setNum(maxNum + 1);
+			qnaBoardService.insertData(qnaboarddto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "글 작성 중 에러가 발생했습니다.");
+			return "bbs/created";
+		}
+		return "redirect:/list";
 	}
 	
 	@RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
@@ -100,28 +120,8 @@ public class QnaBoardController {
 		return "bbs/list";
 	}
 	
-	@RequestMapping(value = "/created", method = RequestMethod.GET)
-	public String created() throws Exception{
-		return "bbs/created";
-	}
-	
-	@RequestMapping(value = "/created", method = RequestMethod.POST)
-	public String createdOK(QnaBoardDto qnaboarddto, HttpServletRequest request, Model model) {
-		
-		try {
-			int maxNum = qnaBoardService.maxNum();
-			qnaboarddto.setNum(maxNum + 1);
-			qnaBoardService.insertData(qnaboarddto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("errorMessage", "글 작성 중 에러가 발생했습니다.");
-			return "bbs/created";
-		}
-		return "redirect:/list";
-	}
-	
 	@RequestMapping(value = "/article",
-			method = {RequestMethod.GET,RequestMethod.POST})
+			method = RequestMethod.GET)
 	public String article(HttpServletRequest request, Model model) {
 			
 			try {
@@ -153,7 +153,6 @@ public class QnaBoardController {
 				model.addAttribute("params", param);
 				model.addAttribute("pageNum", pageNum);
 				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 				model.addAttribute("errorMessage", "게시글을 불러오는 중 에러가 발생했습니다.");
@@ -161,12 +160,12 @@ public class QnaBoardController {
 				return "bbs/article";
 	}
 	
-	@RequestMapping(value = "/updated", method = {RequestMethod.GET, RequestMethod.POST})
-	public String updated(HttpServletRequest request, Model model) throws Exception{
+	@RequestMapping(value = "/updated", method = RequestMethod.GET)
+	public String updated(HttpServletRequest request, Model model) {
 		
+		try {
 		int num = Integer.parseInt(request.getParameter("num"));
 		String pageNum = request.getParameter("pageNum");
-		
 		String searchKey = request.getParameter("searchKey");
 		String searchValue = request.getParameter("searchValue");
 		
@@ -183,11 +182,76 @@ public class QnaBoardController {
 		String param = "pageNum=" + pageNum;
 		
 		if(searchValue != null && !searchValue.equals("")) {
-			
+			param += "&searchKey=" + searchKey;
+			param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
 		}
 		
-		return pageNum;
+		model.addAttribute("qnaboarddto", qnaboarddto);
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("params", param);
+		model.addAttribute("searchKey", searchKey);
+		model.addAttribute("searchValue", searchValue);
 		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
+		return "bbs/updated";
 	}
+	
+	@RequestMapping(value = "/updated_ok", method = RequestMethod.POST)
+	public String updatedOK(QnaBoardDto qnaboarddto, HttpServletRequest request, Model model) {
+		String pageNum = request.getParameter("pageNum"); 
+		String searchKey = request.getParameter("searchKey"); 
+		String searchValue = request.getParameter("searchValue"); 
+		String param = "?pageNum=" + pageNum;
+		
+		try {
+			qnaboarddto.setContent(qnaboarddto.getContent().replaceAll("<br/>", "\r\n"));
+			qnaBoardService.updateData(qnaboarddto);
+			
+			if(searchValue != null && !searchValue.equals("")) {
+				param += "&searchKey=" + searchKey;
+				param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8"); 
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+	
+			try {
+				param += "&errorMessage=" + URLEncoder.encode("수정 중 에러가 발생했습니다.", "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		return "redirect:/list" + param;
+	}
+	
+	@RequestMapping(value = "/deleted_ok", method= {RequestMethod.GET})
+	public String deleteOK(HttpServletRequest request, Model model) {
+		int num = Integer.parseInt(request.getParameter("num"));
+		String pageNum = request.getParameter("pageNum");
+		String searchKey = request.getParameter("searchKey"); 
+		String searchValue = request.getParameter("searchValue"); 
+		String param = "?pageNum=" + pageNum;
+		
+		try {
+			qnaBoardService.deleteData(num);
+			if(searchValue != null && !searchValue.equals("")) {
+				param += "&searchKey=" + searchKey;
+				param += "&searchValue=" + URLEncoder.encode(searchValue, "UTF-8");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			try {
+				param += "&errorMessage=" + URLEncoder.encode("게시글 삭제 중 에러가 발생했습니다.", "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		return "redirect:/list" + param;
+		}
 	}

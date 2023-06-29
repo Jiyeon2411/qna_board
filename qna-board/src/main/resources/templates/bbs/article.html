@@ -4,64 +4,58 @@
       layout:decorate="~{layouts/layout1}">
 
 <th:block layout:fragment="css">
-	<link rel="stylesheet" type="text/css" href="css/article.css"/>
+	
 </th:block>
 
 <div id="bbs" layout:fragment="content">
-	<div id="bbsArticle" style="border:1px; height:300px">
+	<div id="bbsArticle" style="border: 1px solid black;height: 300px; width:700px; margin: 0 auto;">
 		
-		<div id="bbsArticle_header">
-			<p th:text="${qnaboarddto.subject}" style=width:60px></p> 
+		<div id="bbsArticle_header" style="height: 50px; border: 1px solid black;  text-align: left;">
+			<p th:text="${qnaboarddto.subject}" style="width: 350px; font-size: 25px; padding-left: 20px; padding-top: 10px;"></p> 
+			<div class="created" style="display: flex; width:300px; align-items: end; padding-bottom: 50px;">
+			<dd th:text="${qnaboarddto.created}" style="font-size: 15px;" ></dd>
+			</div>
 		</div>
 		
 		<div class="bbsArticle_bottomLine">
-			<dl>
-				<dt>작성자</dt>
-				<dd th:text="${qnaboarddto.name}" ></dd>
+			<dl style= "border: 1px solid black;">
+				<dt style="display: inline-block; width: 100px; height: 40px; font-size: 20px; padding-left: 20px; padding-top: 15px; border: 1px solid black;">작성자</dt>
+				<dd th:text="${qnaboarddto.name}" style="display: inline-block; height: 40px; width:400px; font-size:20px; padding-left: 20px; padding-top: 15px;"></dd>
+				<div class="hitCount" style="text-align: right; display: inline-block; font-size: 15px;">
+				<dt style="display: inline-block; width: 50px;">조회수</dt>
+				<dd th:text="${qnaboarddto.hitCount}" style="display: inline-block; width: 50px;"></dd>
+				</div>
 			</dl>		
 		</div>
 		
-		<div class="bbsArticle_bottomLine">
-			<dl>
-				<dt>등록일</dt>
-				<dd th:text="${qnaboarddto.created}"></dd>
-				<dt>조회수</dt>
-				<dd th:text="${qnaboarddto.hitCount}" style=width:50px></dd>
-			</dl>		
-		</div>
-		
-		<div id="bbsArticle_content">
+		<div id="bbsArticle_content" style="height: 400px;">
 			<table width="600" border="0">
 			<tr>
-				<td style="padding-left: 20px 80px 20px 62px;" 
-				valign="top" height="20px" >
-				<textarea rows="12" cols="82" name="content"
-				style="border: none"
-				class="boxTA" th:text="${qnaboarddto.content}"></textarea>
+				<td style="padding: 20px 80px 20px 62px;" valign="top" height="20px" >
+					<textarea rows="12" cols="82" name="content" style="border: none; width: 100%; padding-left: 100px; height: 150px;" 
+					class="boxTA" th:text="${qnaboarddto.content}"></textarea>
+				</td>
 			</tr>			
 			</table>
 		</div>
 		
 	</div>
 	
-	<div id="bbsArticle_footer">
-		<div id="leftFooter">
-			<input type="button" value=" 수정 " class="btn2" style="border-radius:50px; background-color:pink; width:50px"
+	<div id="bbsArticle_footer" style="margin: 0 auto; padding-top: 20px;">
+		<div id="leftFooter" style="margin: 0 auto; width: 600px; text-align: center;">
+			<input type="button" value="수정" class="btn2" style="border-radius: 50px; background-color: pink; width: 50px;" 
 			th:onclick="|location.href='updated?num=@{${qnaboarddto.num}}&@{${params}}'|"/>
-			<input type="button" value=" 삭제 " class="btn2" style="border-radius:50px; background-color:pink; width:50px"
+			<input type="button" value="삭제" class="btn2" style="border-radius: 50px; background-color: pink; width: 50px;" 
 			th:onclick="|location.href='deleted_ok?num=@{${qnaboarddto.num}}&@{${params}}'|"/>
-		</div>
-		<div id="rightFooter">
-			<input type="button" value=" 리스트 " class="btn2" style="border-radius:50px; background-color:pink; width:50px" 
+			<input type="button" value="리스트" class="btn2" style="border-radius: 50px; background-color: pink; width: 50px;" 
 			th:onclick="|location.href='list?@{${params}}'|"/>
-		</div>	
+		</div>
 	</div>
 </div>
 
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
 	</script>
-	</th:block>
-
+</th:block>
 
 </html>

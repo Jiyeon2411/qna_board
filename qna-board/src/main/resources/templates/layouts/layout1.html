@@ -26,7 +26,7 @@
 </head>
 <body>
     <!-- fragments/header.html의 header를 가지고와 치환한다. -->
-    <div th:replace="fragments/header::header"></div>
+    <div th:replace="~{fragments/header::header}"></div>
 
     <!-- 레이아웃에서 변경될 영역을 설정 -->
     <!-- 해당 위치에 content라는 레이아웃 코드를 불러온다 -->
@@ -35,7 +35,7 @@
     </div>
 
     <!-- fragments/footer.html의 footer를 가지고와 치환한다. -->
-    <div th:replace="fragments/footer::footer"></div>
+    <div th:replace="~{fragments/footer::footer}"></div>
     
 	<!-- 각 페이지의 스크립트가 작성될 위치 -->
 	<th:block layout:fragment="script"></th:block>

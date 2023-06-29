@@ -2,11 +2,8 @@ package com.qnaboard.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.qnaboard.dto.QnaBoardDto;
 
-@Service
 public interface QnaBoardService {
 	public int maxNum() throws Exception;
 	

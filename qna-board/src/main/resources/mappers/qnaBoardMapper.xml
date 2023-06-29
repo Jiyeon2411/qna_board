@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	SELECT NUM, NAME, SUBJECT, CONTENT, CREATED , HITCOUNT FROM QNA WHERE NUM = #{num}
 </select>
 
-<update id="updateData" parameterType="string">
+<update id="updateData">
 	UPDATE QNA SET NAME = #{name}, SUBJECT=#{subject}, CONTENT=#{content} WHERE NUM = #{num}
 </update>
 

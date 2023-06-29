@@ -1,56 +1,54 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>문의하기</title>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
 
-<link rel="stylesheet" type="text/css" href="css/created.css"/>
-
-</head>
-<body>
+<th:block layout:fragment="css">
+	<link rel="stylesheet" type="text/css" href="css/created.css" />
+</th:block>
 
 <div id="bbs" layout:fragment="content">
 	<form action="/created" method="post" name="myForm" enctype="multipart/form-data">
-	<div id="bbsCreated">
+	<div id="bbsCreated" style="border: pink; width:700px; margin:0 auto;">
 		
-		<div class="bbsCreated_bottomLine">
+		<div class="bbsCreated_bottomLine" style="border: pink;">
 			<dl>
-				<dt>제&nbsp;&nbsp;&nbsp;&nbsp;목</dt>
+				<dt style="background-color: pink; text-align: center;">제목</dt>
 				<dd>
 				<input type="text" name="subject" size="60" 
-				maxlength="100" class="boxTF"/>
+				maxlength="100" class="boxTF" style="border-radius: 10px;"/>
 				</dd>
 			</dl>		
 		</div>
 		
-		<div class="bbsCreated_bottomLine">
+		<div class="bbsCreated_bottomLine" style="border-radius: 10px; border: pink;">
 			<dl>
-				<dt>작 성 자</dt>
+				<dt style="background-color: pink; text-align: center;">작성자</dt>
 				<dd>
 				<input type="text" name="name" size="35" 
-				maxlength="20" class="boxTF"/>
+				maxlength="20" class="boxTF" style="border-radius: 10px"/>
 				</dd>
 			</dl>		
 		</div>
 		
-		<div id="bbsCreated_content">
+		<div id="bbsCreated_content" style="border: pink;">
 			<dl>
-				<dt>내&nbsp;&nbsp;&nbsp;&nbsp;용</dt>
+				<dt style="background-color: pink; text-align: center;">내용</dt>
 				<dd>
 				<textarea rows="12" cols="63" name="content"
-				class="boxTA"></textarea>
+				class="boxTA" style="border-radius: 10px"></textarea>
 				</dd>
 			</dl>
 		</div>
 	
 	</div>
 	
-	<div id="bbsCreated_footer">
-		<input type="button" value=" 등록하기 " class="btn2" onclick="sendIt();"/>
+	<div id="bbsCreated_footer" style="margin: 0 auto; padding-top:20px ; width: 300px">
+		<input type="button" value=" 등록하기 " class="btn2" onclick="sendIt();" style="background-color: pink; border-radius: 10px;"/>
 		<input type="reset" value=" 다시입력 " class="btn2" 
-		onclick="document.myForm.subject.focus();"/>
+		onclick="document.myForm.subject.focus();" style="background-color: pink; border:none ; height: 25px; border-radius: 10px;"/>
 		<input type="button" value=" 목록으로 " class="btn2" 
-		onclick="javascript:location.href='/list';"/>
+		onclick="javascript:location.href='/list';" style="background-color: pink; border-radius: 10px;"/>
 	</div>
 	</form>
 </div>
@@ -81,29 +79,13 @@
 			alert("\n이름을 입력하세요.");
 			f.name.focus();
 			return;
-		}		
-		
-		if(f.email.value){
-			if(!isValidEmail(f.email.value)){
-				alert("\n정상적인 E-Mail을 입력하세요.");
-				f.email.focus();
-				return;
-			}
-		}
+		}	
 		
 		str = f.content.value;
 		str = str.trim();
 		if(!str){
 			alert("\n내용을 입력하세요.");
 			f.content.focus();
-			return;
-		}
-		
-		str = f.pwd.value;
-		str = str.trim();
-		if(!str){
-			alert("\n패스워드를 입력하세요.");
-			f.pwd.focus();
 			return;
 		}
 
@@ -114,5 +96,4 @@
 	</script>
 </th:block>
 
-</body>
 </html>
