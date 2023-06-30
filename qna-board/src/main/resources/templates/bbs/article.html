@@ -10,21 +10,21 @@
 <div id="bbs" layout:fragment="content">
 	<div id="bbsArticle" style="border: 1px solid black;height: 300px; width:700px; margin: 0 auto;">
 		
-		<div id="bbsArticle_header" style="height: 50px; border: 1px solid black;  text-align: left;">
-			<p th:text="${qnaboarddto.subject}" style="width: 350px; font-size: 25px; padding-left: 20px; padding-top: 10px;"></p> 
-			<div class="created" style="display: flex; width:300px; align-items: end; padding-bottom: 50px;">
-			<dd th:text="${qnaboarddto.created}" style="font-size: 15px;" ></dd>
-			</div>
+		<div id="bbsArticle_header" style="display:flex; height: 50px; border: 1px solid black;  text-align: left;">
+			<p th:text="${qnaboarddto.subject}" style=" width: 350px; font-size: 25px; padding-left: 20px; padding-top: 10px;">
+			</p> 
+			
+			<p th:text="${qnaboarddto.created}" class="created" style="display:flex; align-items:center; justify-content:flex-end; width:300px; font-size: 15px;"></p>
 		</div>
 		
 		<div class="bbsArticle_bottomLine">
 			<dl style= "border: 1px solid black;">
 				<dt style="display: inline-block; width: 100px; height: 40px; font-size: 20px; padding-left: 20px; padding-top: 15px; border: 1px solid black;">작성자</dt>
 				<dd th:text="${qnaboarddto.name}" style="display: inline-block; height: 40px; width:400px; font-size:20px; padding-left: 20px; padding-top: 15px;"></dd>
-				<div class="hitCount" style="text-align: right; display: inline-block; font-size: 15px;">
+				
 				<dt style="display: inline-block; width: 50px;">조회수</dt>
 				<dd th:text="${qnaboarddto.hitCount}" style="display: inline-block; width: 50px;"></dd>
-				</div>
+				
 			</dl>		
 		</div>
 		
